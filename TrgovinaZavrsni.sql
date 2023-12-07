@@ -12,28 +12,42 @@ alter database trgovina collate Croatian_CI_AS;
 
 use trgovina;
 
-create table korisnik(
-sifra int not null primary key identity(1,1),
-korisnickoIme varchar(50) not null,
-lozinka varchar(20) not null
+
+create table korisnici(
+	sifra int not null primary key identity(1,1),
+	korisnickoIme varchar(50) not null,
+	lozinka varchar(100) not null
 );
 
-create table proizvod(
-sifra int not null primary key identity(1,1),
-naziv varchar(50) not null,
-cijena decimal(18,2),
-racun varchar(50)
+
+create table proizvodi(
+	sifra int not null primary key identity(1,1),
+	naziv varchar(50) not null,
+	cijena decimal(18,2),
+	racun varchar(50)
 );
+
 
 create table djelatnice(
-sifra int not null primary key identity(1,1),
-ime varchar(50) not null,
-prezime varchar(50) not null
+	sifra int not null primary key identity(1,1),
+	ime varchar(50) not null,
+	prezime varchar(50) not null
 );
+
+
+create table racuni(
+	djelatnica int not null primary key,
+	korisnik int,
+	datum datetime,
+	brojracuna varchar(50) not null,
+	proizvod int
+);
+
 
 
 
 --vanjski kljucevi
-alter table djelatnice add foreign key (sifra) references proizvod(sifra);
-alter table korisnik add foreign key (sifra) references proizvod(sifra);
-alter table proizvod add foreign key (sifra) references korisnik(sifra);
+alter table racuni add foreign key (korisnik) references korisnici(sifra);
+alter table racuni add foreign key (proizvod) references proizvodi(racun);
+alter table proizvodi add foreign key (sifra) references korisnici(sifra);
+alter table djelatnice add foreign key (sifra) references proizvodi(sifra);
